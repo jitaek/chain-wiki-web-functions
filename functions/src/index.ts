@@ -67,3 +67,20 @@ exports.legendArcana = functions.https.onCall(async() => {
     }
 
 });
+
+exports.abyssalArcana = functions.https.onCall(async() => {
+
+    try {
+        const ref = db.collection('arcana').where('isAbyssal', '==', true);
+        const snapshot = await ref.get();
+        const array = [];
+        snapshot.forEach(doc => {
+            array.push(doc.data());
+        });
+        return array;
+    }
+    catch(error) {
+        return error;
+    }
+
+});
