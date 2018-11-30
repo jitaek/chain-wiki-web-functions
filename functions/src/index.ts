@@ -1,5 +1,7 @@
 import { FUNCTIONS, db } from './config';
 
+import { nameKROnWrite } from './arcana';
+
 exports.recentArcana = FUNCTIONS.https.onCall(async(data) => {
 
     try {
