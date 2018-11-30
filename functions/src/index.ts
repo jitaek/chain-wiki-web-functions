@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 // const config = {
 //     apiKey: "AIzaSyBD9eX7ABB0Xu1N6CnSdKL-bnsNF5WgLtc",
-//     // authDomain: "chainchronicle-ea233.firebaseapp.com",
+//     authDomain: "chainchronicle-ea233.firebaseapp.com",
 //     databaseURL: "https://chainchronicle-ea233.firebaseio.com",
 //     projectId: "chainchronicle-ea233",
 //     // storageBucket: "chainchronicle-ea233.appspot.com",
@@ -17,6 +17,33 @@ admin.initializeApp(config);
 const db = admin.firestore();
 db.settings({timestampsInSnapshots: true});
 
+exports.recentArcana = functions.https.onCall(async(data) => {
+
+    try {
+        const lastArcanaIDKey = data.offset
+        const limit = data.limit || 30;
+
+        let query;
+        if (lastArcanaIDKey) {
+            // paginated
+            query = db.collection('arcana').orderBy('uid', 'desc').startAfter(lastArcanaIDKey).limit(limit);
+        }
+        else {
+            // initial GET
+            query = db.collection('arcana').orderBy('uid', 'desc').limit(limit);
+        }
+        const snapshot = await query.get();
+        const array = [];
+        snapshot.forEach(doc => {
+            array.push(doc.data());
+        });
+        return array;
+    }
+    catch(error) {
+        return error;
+    }
+
+});
 exports.rewardArcana = functions.https.onCall(async() => {
 
     try {
