@@ -17,10 +17,27 @@ admin.initializeApp(config);
 const db = admin.firestore();
 db.settings({timestampsInSnapshots: true});
 
-exports.rewardArcana = functions.https.onCall(async(data) => {
+exports.rewardArcana = functions.https.onCall(async() => {
 
     try {
         const ref = db.collection('arcana').where('isReward', '>=', 0);
+        const snapshot = await ref.get();
+        const array = [];
+        snapshot.forEach(doc => {
+            array.push(doc.data());
+        });
+        return array;
+    }
+    catch(error) {
+        return error;
+    }
+
+});
+
+exports.festivalArcana = functions.https.onCall(async() => {
+
+    try {
+        const ref = db.collection('arcana').where('isFestival', '>=', 0);
         const snapshot = await ref.get();
         const array = [];
         snapshot.forEach(doc => {
