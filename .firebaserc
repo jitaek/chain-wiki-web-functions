@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "chainchronicle-ea233"
+    "default": "chainchronicle-ea233",
+    "dev": "firestore-test-646f4"
   }
 }
