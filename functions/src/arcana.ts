@@ -38,6 +38,34 @@ export const nameKROnCreate = FUNCTIONS.firestore.document('arcana/{arcanaID}/na
 
 });
 
+/**
+ * Store same-named arcana. Possibly can remove this, and just query /arcana for nameKR === suppliedNameKR. Performance?
+ */
+export const updateRelatedArcanaOnCreate = FUNCTIONS.firestore.document('arcana/{arcanaID}/nameKR').onCreate((snap, context) => {
+
+    const arcanaID = context.params.arcanaID;
+    const nameKR = snap.data().val;
+    
+    return db.collection('nameKR').doc(nameKR).get().then(snapshot => {
+
+        const relatedNameKR = snapshot.data();
+        if (relatedNameKR) {
+            // add relatedArcana to this newly created arcana.
+            return db.collection('arcana').doc(arcanaID).update({
+                related: relatedNameKR
+            }).then(() => {
+                // add this arcana to /nameKR.
+                const nameObject = {
+                    [arcanaID]: true
+                };
+                return db.collection('nameKR').doc(nameKR).update(nameObject);
+            });
+        }
+        return null;
+    });
+
+});
+
 export const nameKROnDelete = FUNCTIONS.firestore.document('arcana/{arcanaID}/nameKR').onDelete((snap, context) => {
 
     const arcanaID = context.params.arcanaID;
