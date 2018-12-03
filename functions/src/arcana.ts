@@ -34,6 +34,15 @@ export const nameKROnCreate = FUNCTIONS.firestore.document('arcana/{arcanaID}/na
 
 });
 
+export const nameKROnDelete = FUNCTIONS.firestore.document('arcana/{arcanaID}/nameKR').onDelete((snap, context) => {
+
+    const arcanaID = context.params.arcanaID;
+
+    const ref = db.collection('search').doc(arcanaID);
+    return ref.delete();
+
+});
+
 /**
  * Helper function that updates the appropriate search key.
  */
