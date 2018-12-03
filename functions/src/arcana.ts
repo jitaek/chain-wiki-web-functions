@@ -108,25 +108,3 @@ export const nicknameJPOnUpdate = FUNCTIONS.firestore.document('arcana/{arcanaID
     return updateName(change, context, NameType.NicknameJP);
 
 });
-
-export const nameJPOnWrite = FUNCTIONS.firestore.document('arcana/{arcanaID}/nameJP').onWrite((change, context) => {
-
-    const oldArcana = change.before.data();
-
-    const arcana = change.after.exists ? change.after.data() : null;
-
-    if (arcana) {
-        if (arcana.nameJP === oldArcana.nameJP) return null;
-        return db.collection('search').doc(arcana.uid).set({
-            nameKR: arcana.nameKR,
-            nameJP: arcana.nameJP,
-            iconURL: arcana.iconURL,
-            imageURL: arcana.imageURL
-        });
-    }
-    else {
-        // deleted
-        return db.collection('search').doc(oldArcana.uid).delete();
-    }
-
-});
