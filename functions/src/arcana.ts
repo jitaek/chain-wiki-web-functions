@@ -20,17 +20,30 @@ export const nameKROnCreate = FUNCTIONS.firestore.document('arcana/{arcanaID}/na
             const nicknameKR = arcana.nicknameKR;
             const nameJP = arcana.nameJP;
             const nicknameJP = arcana.nicknameJP;
+            const imageURL = arcana.imageURL;
+            const iconURL = arcana.iconURL;
             return db.collection('search').doc(arcanaID).update({
                 nameKR: nameKR,
                 nicknameKR: nicknameKR,
                 nameJP: nameJP,
-                nicknameJP: nicknameJP
+                nicknameJP: nicknameJP,
+                imageURL: imageURL,
+                iconURL: iconURL
             });
         }
         else {
             return Promise.reject(`Snapshot does not exist at /arcana/${arcanaID}`);
         }
     });
+
+});
+
+export const nameKROnDelete = FUNCTIONS.firestore.document('arcana/{arcanaID}/nameKR').onDelete((snap, context) => {
+
+    const arcanaID = context.params.arcanaID;
+
+    const ref = db.collection('search').doc(arcanaID);
+    return ref.delete();
 
 });
 
@@ -97,27 +110,5 @@ export const nameJPOnUpdate = FUNCTIONS.firestore.document('arcana/{arcanaID}/na
 export const nicknameJPOnUpdate = FUNCTIONS.firestore.document('arcana/{arcanaID}/nicknameJP').onUpdate((change, context) => {
 
     return updateName(change, context, NameType.NicknameJP);
-
-});
-
-export const nameJPOnWrite = FUNCTIONS.firestore.document('arcana/{arcanaID}/nameJP').onWrite((change, context) => {
-
-    const oldArcana = change.before.data();
-
-    const arcana = change.after.exists ? change.after.data() : null;
-
-    if (arcana) {
-        if (arcana.nameJP === oldArcana.nameJP) return null;
-        return db.collection('search').doc(arcana.uid).set({
-            nameKR: arcana.nameKR,
-            nameJP: arcana.nameJP,
-            iconURL: arcana.iconURL,
-            imageURL: arcana.imageURL
-        });
-    }
-    else {
-        // deleted
-        return db.collection('search').doc(oldArcana.uid).delete();
-    }
 
 });
