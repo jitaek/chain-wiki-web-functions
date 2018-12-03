@@ -1,6 +1,6 @@
 import { FUNCTIONS, db } from './config';
 
-import { nameKROnWrite } from './arcana';
+import { nameKROnCreate, nameKROnUpdate, nicknameKROnUpdate, nameJPOnUpdate, nicknameJPOnUpdate } from './arcana';
 
 exports.recentArcana = FUNCTIONS.https.onCall(async(data) => {
 
