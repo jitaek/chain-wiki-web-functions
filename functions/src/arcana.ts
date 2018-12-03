@@ -20,11 +20,15 @@ export const nameKROnCreate = FUNCTIONS.firestore.document('arcana/{arcanaID}/na
             const nicknameKR = arcana.nicknameKR;
             const nameJP = arcana.nameJP;
             const nicknameJP = arcana.nicknameJP;
+            const imageURL = arcana.imageURL;
+            const iconURL = arcana.iconURL;
             return db.collection('search').doc(arcanaID).update({
                 nameKR: nameKR,
                 nicknameKR: nicknameKR,
                 nameJP: nameJP,
-                nicknameJP: nicknameJP
+                nicknameJP: nicknameJP,
+                imageURL: imageURL,
+                iconURL: iconURL
             });
         }
         else {
