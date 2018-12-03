@@ -14,8 +14,11 @@ const config = {
     projectId: "firestore-test-646f4",
 };
 admin.initializeApp(config);
-const database = admin.firestore();
-database.settings({timestampsInSnapshots: true});
+const firestore = admin.firestore();
+firestore.settings({timestampsInSnapshots: true});
 
-export const db = database;
+const realtimeDatabase = admin.database();
+
+export const db = firestore;
 export const FUNCTIONS = functions;
+export const realtimeDB = realtimeDatabase;
