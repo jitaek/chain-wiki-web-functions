@@ -168,7 +168,7 @@ exports.updateAbyssal = FUNCTIONS.https.onCall(async() => {
             const arcanaID = child.key;
             const arcana = child.val();
             if (arcana.tavern.includes('소용돌이') || arcana.tavern.includes('천마')) {
-                batch1.set(db.collection('arcana').doc(arcanaID), {isAbyssal: true})
+                batch1.update(db.collection('arcana').doc(arcanaID), {isAbyssal: true})
             }
             return false;
         });
