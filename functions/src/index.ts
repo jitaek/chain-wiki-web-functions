@@ -177,3 +177,24 @@ exports.updateAbyssal = FUNCTIONS.https.onCall(async() => {
         })
     });
 });
+
+exports.updateLegend = FUNCTIONS.https.onCall(async() => {
+
+    return realtimeDB.ref('arcana').once('value', snapshot => {
+
+        const batch1 = db.batch();
+
+        snapshot.forEach(child => {
+            const arcanaID = child.key;
+            const arcana = child.val();
+            if (arcana.tavern.includes('레전드')) {
+                batch1.update(db.collection('arcana').doc(arcanaID), {isLegend: true})
+            }
+            return false;
+        });
+        return batch1.commit().then(() => {
+            console.log('success batch');
+        })
+    });
+    
+});
