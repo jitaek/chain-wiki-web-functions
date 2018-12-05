@@ -70,11 +70,15 @@ exports.festivalArcana = FUNCTIONS.https.onCall(async() => {
 exports.legendArcana = FUNCTIONS.https.onCall(async() => {
 
     try {
-        const ref = db.collection('arcana').where('isLegend', '==', true).orderBy('timestamp', 'desc');
+        const ref = db.collection('arcana').where('isLegend', '==', true);
         const snapshot = await ref.get();
         const array = [];
         snapshot.forEach(doc => {
             array.push(doc.data());
+        });
+        // Sort arcana by NEWEST to OLDEST
+        array.sort((a,b) => {
+            return b.timestamp - a.timestamp;
         });
         return array;
     }
@@ -93,7 +97,7 @@ exports.abyssalArcana = FUNCTIONS.https.onCall(async() => {
         snapshot.forEach(doc => {
             array.push(doc.data());
         });
-        // Sort arcana by oldest to newest
+        // Sort arcana by OLDEST to NEWEST
         array.sort((a,b) => {
             return a.timestamp - b.timestamp;
         });
