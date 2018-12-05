@@ -78,7 +78,7 @@ exports.legendArcana = FUNCTIONS.https.onCall(async() => {
         });
         // Sort arcana by NEWEST to OLDEST
         array.sort((a,b) => {
-            return b.timestamp - a.timestamp;
+            return a.timestamp - b.timestamp;
         });
         return array;
     }
