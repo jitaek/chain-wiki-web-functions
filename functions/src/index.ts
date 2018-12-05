@@ -36,7 +36,7 @@ exports.recentArcana = FUNCTIONS.https.onCall(async(data) => {
 exports.rewardArcana = FUNCTIONS.https.onCall(async() => {
 
     try {
-        const ref = db.collection('arcana').where('isReward', '>=', 0);
+        const ref = db.collection('arcana').where('isReward', '>=', 0).orderBy('isReward');
         const snapshot = await ref.get();
         const array = [];
         snapshot.forEach(doc => {
@@ -53,7 +53,7 @@ exports.rewardArcana = FUNCTIONS.https.onCall(async() => {
 exports.festivalArcana = FUNCTIONS.https.onCall(async() => {
 
     try {
-        const ref = db.collection('arcana').where('isFestival', '>=', 0);
+        const ref = db.collection('arcana').where('isFestival', '>=', 0).orderBy('isFestival');
         const snapshot = await ref.get();
         const array = [];
         snapshot.forEach(doc => {
@@ -70,7 +70,7 @@ exports.festivalArcana = FUNCTIONS.https.onCall(async() => {
 exports.legendArcana = FUNCTIONS.https.onCall(async() => {
 
     try {
-        const ref = db.collection('arcana').where('isLegend', '==', true);
+        const ref = db.collection('arcana').where('isLegend', '==', true).orderBy('timestamp', 'desc');
         const snapshot = await ref.get();
         const array = [];
         snapshot.forEach(doc => {
@@ -87,7 +87,7 @@ exports.legendArcana = FUNCTIONS.https.onCall(async() => {
 exports.abyssalArcana = FUNCTIONS.https.onCall(async() => {
 
     try {
-        const ref = db.collection('arcana').where('isAbyssal', '==', true);
+        const ref = db.collection('arcana').where('isAbyssal', '==', true).orderBy('timestamp');;
         const snapshot = await ref.get();
         const array = [];
         snapshot.forEach(doc => {
