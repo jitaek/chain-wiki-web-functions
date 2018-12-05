@@ -87,7 +87,7 @@ exports.legendArcana = FUNCTIONS.https.onCall(async() => {
 exports.abyssalArcana = FUNCTIONS.https.onCall(async() => {
 
     try {
-        const ref = db.collection('arcana').where('isAbyssal', '==', true).orderBy('timestamp');;
+        const ref = db.collection('arcana').where('isAbyssal', '==', true).orderBy('timestamp');
         const snapshot = await ref.get();
         const array = [];
         snapshot.forEach(doc => {
