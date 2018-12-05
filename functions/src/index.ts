@@ -157,3 +157,23 @@ function decode(pushId) {
   }
   return timestamp;
 }
+
+exports.updateAbyssal = FUNCTIONS.https.onCall(async() => {
+
+    return realtimeDB.ref('arcana').once('value', snapshot => {
+
+        const batch1 = db.batch();
+
+        snapshot.forEach(child => {
+            const arcanaID = child.key;
+            const arcana = child.val();
+            if (arcana.tavern.includes('소용돌이') || arcana.tavern.includes('천마')) {
+                batch1.set(db.collection('arcana').doc(arcanaID), {isAbyssal: true})
+            }
+            return false;
+        });
+        return batch1.commit().then(() => {
+            console.log('success batch');
+        })
+    });
+});
